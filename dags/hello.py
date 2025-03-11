@@ -6,9 +6,9 @@ from airflow.operators.empty import EmptyOperator
 with DAG(
     "hello",
     # schedule=timedelta(days=1),
-    # schedule="* * * * *",
-    schedule="@hourly",
-    start_date=datetime(2025, 3, 10)
+    schedule="0 * * * *",
+    # schedule="@hourly",
+    start_date=datetime(2025, 3, 11)
 ) as dag:
     start = EmptyOperator(task_id="start")
     end = EmptyOperator(task_id="end")
