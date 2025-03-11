@@ -59,7 +59,7 @@ with DAG(
     )
     b_2_2 = BashOperator(
         task_id="b_2_2",
-        bash_command=f"""
+        bash_command="""
         echo "data_interval_start: {{ data_interval_start.in_tz('Asia/Seoul') }}"
         """
     )
@@ -73,7 +73,7 @@ with DAG(
         LOG_FILE="$LOG_DIR/task_{{ task_instance.task_id }}.log"
         
         mkdir -p "$LOG_DIR"
-        echo "로그 기록 (data_interval_start: {{ data_interval_start }})" >> "$LOG_FILE"
+        echo "로그 기록 (data_interval_start: {{ data_interval_start.in_tz('Asia/Seoul') }})" >> "$LOG_FILE"
         """
     )
     
