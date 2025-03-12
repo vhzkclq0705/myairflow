@@ -8,8 +8,10 @@ def send_noti(msg):
     
     data = {'content': msg}
     response = requests.post(WEBHOOK_URL, json=data)
+    status_code = response.status_code
     
-    if response.status_code == 204:
+    if status_code == 204:
         print("메시지가 성공적으로 전송되었습니다.")
     else:
         print("메시지 전송에 실패했습니다.")
+    return status_code
