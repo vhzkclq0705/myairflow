@@ -11,12 +11,9 @@ def generate_bash_commands(vars: list):
     max_len = max(map(len, vars))
     return "\n".join([f'echo "{var}{" " * (max_len - len(var))} : ===> {{{{ {var} }}}}"' for var in vars])
 
-def print_kwargs(**kwargs):
-    # Discord notification
-    dag_id = kwargs['dag'].dag_id
-    task_id = kwargs['task'].task_id
-    time = kwargs['data_interval_start'].in_tz('Asia/Seoul').strftime("%Y%m%d%H")
-    msg = f"<{dag_id}> <{task_id}> <{time}> OK / Jerry"
+def print_kwargs(dag, task, data_interval_start, **kwargs):
+    ds = data_interval_start.in_tz('Asia/Seoul').format('YYYYMMDDHH')
+    msg = f"{dag.dag_id} {task.task_id} {ds} OK / Jerry"
     from myairflow.notify import send_noti
     send_noti(msg)
     
@@ -72,7 +69,8 @@ with DAG(
         python_callable=print_kwargs
     )
     
-    start >> b_1 >> [b_2_1, b_2_2] >> mkdir >> [end, send_notification]
+    start >> b_1 >> [b_2_1, b_2_2] >> mkdir >> end
+    mkdir >> send_notification
     
 if __name__ == "__main__":
     dag.test()
