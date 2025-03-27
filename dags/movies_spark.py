@@ -18,24 +18,24 @@ with DAG(
     description="movie spark submit",
     schedule="10 10 * * *",
     start_date=datetime(2024, 1, 1),
-    end_date=datetime(2024, 1, 2),
+    end_date=datetime(2025, 1, 1),
     catchup=True,
     tags=["spark", "submit", "movie"],
 ) as dag:
     SPARK_HOME = "/Users/joon/swcamp4/app/spark-3.5.1-bin-hadoop3"
     SCRIPT_BASE = "/Users/joon/swcamp4/code/myairflow/pyspark"
-    META_PATH = "/Users/joon/swcamp4/data/movie_spark/meta/_SUCCESS"
+    META_PATH = "/Users/joon/swcamp4/data/movie_spark/meta"
     RAW_BASE = "/Users/joon/swcamp4/data/data/movie_after/dailyboxoffice"
     
     def check_exists_meta():
         import os
-        if os.path.exists(META_PATH):
+        if os.path.exists(f"{META_PATH}/_SUCCESS"):
             return append_meta.task_id
         else:
             return create_meta.task_id
     
     start = EmptyOperator(task_id="start")
-    end = EmptyOperator(task_id="end", trigger_rule="all_done")
+    end = EmptyOperator(task_id="end", trigger_rule="none_failed")
     
     exists_meta = BranchPythonOperator(
         task_id="exists.meta",
