@@ -77,7 +77,7 @@ with DAG(
             "base_dir": BASE_DIR
         }
     )
-
+ 
     multi_n = PythonVirtualenvOperator(
         task_id='multi.n',
         python_callable=common_get_data,
