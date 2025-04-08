@@ -18,7 +18,7 @@ with DAG(
     description="wiki data processing",
     schedule="0 0 * * *",
     start_date=datetime(2024, 1, 1),
-    end_date=datetime(2025, 4, 1),
+    end_date=datetime(2024, 4, 1),
     catchup=True,
     tags=["spark", "submit", "wiki"],
 ) as dag:
@@ -31,7 +31,7 @@ with DAG(
         task_id="wiki.proc",
         bash_command="""
             echo {{ data_interval_start.in_timezone('Asia/Seoul').strftime('%Y%m%dT%H%M%S') }}
-            ssh -i ~/.ssh/gcp-joon-key joon@34.47.105.165 \
+            ssh -i ~/.ssh/gcp-joon-key joon@34.47.75.78 \
             "/home/joon/code/wiki/run.sh {{ data_interval_start.in_timezone('Asia/Seoul').strftime('%Y%m%dT%H%M%S') }} /home/joon/code/wiki/processing.py"
         """
     )
